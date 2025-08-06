@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.arthur_pereira.First.REST.Endpoint.controllers.MathTools.convertToDouble;
+import static com.arthur_pereira.First.REST.Endpoint.controllers.MathTools.isNumber;
+
 @RestController
 @RequestMapping("/math")
 public class MathController {
@@ -46,16 +49,4 @@ public class MathController {
         return Math.sqrt(convertToDouble(n1));
     }
 
-    private Double convertToDouble(String n) {
-        String number = n.replace(".", ",");
-        return Double.valueOf(number);
-    }
-
-    private boolean isNumber(String n) {
-        if (n == null || n.isEmpty()) {
-            return false;
-        }
-        String number = n.replace(".", ",");
-        return (n.matches("[-+]?[0-9]*\\.?[0-9]+"));
-    }
 }
