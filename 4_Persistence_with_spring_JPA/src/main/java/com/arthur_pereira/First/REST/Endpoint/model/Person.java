@@ -1,9 +1,7 @@
 package com.arthur_pereira.First.REST.Endpoint.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import org.springframework.boot.autoconfigure.web.WebProperties;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -14,6 +12,7 @@ public class Person implements Serializable {
     private static final long serialVersionId=1L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(length = 100, nullable = false)
