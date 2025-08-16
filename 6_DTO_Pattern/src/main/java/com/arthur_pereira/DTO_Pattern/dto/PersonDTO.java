@@ -6,7 +6,6 @@ import java.util.Objects;
 public class PersonDTO implements Serializable {
     private static final long serialVersionId=1L;
 
-
     private Long id;
 
     private String firstName;

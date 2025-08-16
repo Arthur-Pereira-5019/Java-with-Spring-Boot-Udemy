@@ -1,7 +1,9 @@
 package com.arthur_pereira.DTO_Pattern.services;
 
 
+import com.arthur_pereira.DTO_Pattern.dto.PersonDTO;
 import com.arthur_pereira.DTO_Pattern.exceptions.ResourceNotFoundException;
+import com.arthur_pereira.DTO_Pattern.mapper.ObjectMapper;
 import com.arthur_pereira.DTO_Pattern.model.Person;
 import com.arthur_pereira.DTO_Pattern.repositories.PersonRepository;
 import org.slf4j.LoggerFactory;
@@ -10,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
+
+import static com.arthur_pereira.DTO_Pattern.mapper.ObjectMapper.parseListObjects;
+import static com.arthur_pereira.DTO_Pattern.mapper.ObjectMapper.parseObject;
 
 @Service
 public class PersonServices {
@@ -22,48 +27,36 @@ public class PersonServices {
 
 
 
-    public List<Person> findAll() {
+    public List<PersonDTO> findAll() {
         logger.info("Finding all people");
-        return repository.findAll();
+        return parseListObjects(repository.findAll(), PersonDTO.class);
     }
 
-    private Person mockPerson(Integer i) {
-        if (i == null) {
-            i = 0;
-        }
-        Person person = new Person();
-        person.setId(counter.incrementAndGet());
-        person.setAddress("SC " + i);
-        person.setFirstName("Arthur " + i);
-        person.setLastName("Pereira " + i);
-        person.setGender("M "+i );
-        return person;
-    }
 
-    public Person createPerson(Person person) {
+    public PersonDTO createPerson(PersonDTO person) {
         logger.debug("Creating new person");
-        return repository.save(person);
+        var entity = parseObject(person, Person.class);
+        return parseObject(repository.save(entity),PersonDTO.class);
     }
 
-    public Person updatePerson(Person person) {
+    public PersonDTO updatePerson(PersonDTO person) {
         logger.info("Updated someone");
-        Person entity = findById(person.getId());
+        Person entity = parseObject(findById(person.getId()), Person.class);
         entity.setAddress(person.getAddress());
         entity.setFirstName(person.getFirstName());
         entity.setLastName(person.getLastName());
         entity.setGender(person.getGender());
-        return repository.save(entity);
+        return parseObject(repository.save(entity), PersonDTO.class);
     }
 
     public void deletePerson(Long id) {
         logger.info("Deleted a person!");
-
-
         repository.deleteById(findById(id).getId());
     }
 
-    public Person findById(Long id) {
+    public PersonDTO findById(Long id) {
         logger.debug("Finding one person!");
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Could not find the user"));
+        var person = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Could not find the user"));
+        return parseObject(person, PersonDTO.class);
     }
 }
