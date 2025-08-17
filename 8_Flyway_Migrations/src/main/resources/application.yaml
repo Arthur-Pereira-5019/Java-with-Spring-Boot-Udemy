@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: flyway_migrations
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/udemy4?useTimezone=true&serverTimezone=UTC
+    username: root
+    password: Art.DB25
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+    show-sql: true
+    open-in-view: true
+logging:
+  level:
+    root: Info
+    com.arthur_pereira.First.REST.Endpoint: Info
