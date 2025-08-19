@@ -30,18 +30,6 @@ public class PersonServices {
         return repository.findAll();
     }
 
-    private Person mockPerson(Integer i) {
-        if (i == null) {
-            i = 0;
-        }
-        Person person = new Person();
-        person.setId(counter.incrementAndGet());
-        person.setAdress("SC " + i);
-        person.setFirstName("Arthur " + i);
-        person.setLastName("Pereira " + i);
-        person.setGender("M "+i );
-        return person;
-    }
 
     public Person createPerson(Person person) {
         logger.debug("Creating new person");
@@ -61,12 +49,12 @@ public class PersonServices {
     public void deletePerson(Long id) {
         logger.info("Deleted a person!");
 
-
         repository.deleteById(findById(id).getId());
     }
 
     public Person findById(Long id) {
         logger.debug("Finding one person!");
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Could not find the user"));
+
     }
 }

@@ -1,19 +1,20 @@
-package com.arthur_pereira.flyway_migrations.services;
+package com.arthur_pereira.custom_json_serialization.services;
 
 
-import com.arthur_pereira.flyway_migrations.dto.PersonDTO;
-import com.arthur_pereira.flyway_migrations.exceptions.ResourceNotFoundException;
-import com.arthur_pereira.flyway_migrations.model.Person;
-import com.arthur_pereira.flyway_migrations.repositories.PersonRepository;
+import com.arthur_pereira.custom_json_serialization.dto.PersonDTO;
+import com.arthur_pereira.custom_json_serialization.exceptions.ResourceNotFoundException;
+import com.arthur_pereira.custom_json_serialization.model.Person;
+import com.arthur_pereira.custom_json_serialization.repositories.PersonRepository;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static com.arthur_pereira.flyway_migrations.mapper.ObjectMapper.parseListObjects;
-import static com.arthur_pereira.flyway_migrations.mapper.ObjectMapper.parseObject;
+import static com.arthur_pereira.custom_json_serialization.mapper.ObjectMapper.parseListObjects;
+import static com.arthur_pereira.custom_json_serialization.mapper.ObjectMapper.parseObject;
 
 @Service
 public class PersonServices {
@@ -30,6 +31,21 @@ public class PersonServices {
     public List<PersonDTO> findAll() {
         logger.info("Finding all people");
         return parseListObjects(repository.findAll(), PersonDTO.class);
+    }
+
+    public PersonDTO mock() {
+        PersonDTO p = new PersonDTO();
+        try {
+            p.setAddress("Longe");
+            p.setBirthDay(new Date(2008,02,20));
+            p.setLastName("5019");
+            p.setFirstName("Art");
+            p.setPhoneNumber("40028922");
+            p.setGender("M");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return p;
     }
 
 

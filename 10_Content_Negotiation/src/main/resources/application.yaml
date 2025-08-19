@@ -1,6 +1,6 @@
 spring:
   application:
-    name: persistance_with_spring_jpa
+    name: flyway_migrations
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/udemy4?useTimezone=true&serverTimezone=UTC
@@ -11,9 +11,9 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-    show-sql: false
-    open-in-view: false
+    show-sql: true
+    open-in-view: true
 logging:
   level:
-    root: Info
-    com.arthur_pereira.First.REST.Endpoint: Info
+    root: Warn
+    com.arthur_pereira.First.REST.Endpoint: Warn
