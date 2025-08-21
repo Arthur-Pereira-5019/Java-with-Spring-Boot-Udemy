@@ -8,8 +8,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
-@JsonPropertyOrder({"id", "gender", "first_name", "last_name", "adress"})
-@JsonFilter("PersonFilter")
 public class PersonDTO implements Serializable {
     private static final long serialVersionId=1L;
 

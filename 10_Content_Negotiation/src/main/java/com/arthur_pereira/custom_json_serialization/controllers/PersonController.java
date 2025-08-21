@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.attribute.standard.Media;
 import java.util.List;
 
 @RestController
@@ -16,7 +17,7 @@ public class PersonController {
     @Autowired
     private PersonServices service;
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
     public PersonDTO findById(@PathVariable("id") Long id) {
         return service.findById(id);
     }
@@ -32,14 +33,14 @@ public class PersonController {
     }
 
     @PostMapping(value = "",
-            produces = MediaType.APPLICATION_JSON_VALUE,
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE},
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public PersonDTO create(@RequestBody PersonDTO PersonDTO) {
         return service.createPerson(PersonDTO);
     }
 
     @PutMapping(value = "",
-            produces = MediaType.APPLICATION_JSON_VALUE,
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE},
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public PersonDTO update(@RequestBody PersonDTO PersonDTO) {
         return service.updatePerson(PersonDTO);
