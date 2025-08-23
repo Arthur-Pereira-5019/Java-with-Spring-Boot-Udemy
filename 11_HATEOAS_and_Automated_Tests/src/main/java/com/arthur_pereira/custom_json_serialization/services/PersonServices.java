@@ -33,7 +33,11 @@ public class PersonServices {
 
     public List<PersonDTO> findAll() {
         logger.info("Finding all people");
-        return parseListObjects(repository.findAll(), PersonDTO.class);
+        var dto = parseListObjects(repository.findAll(), PersonDTO.class);
+        for(var d: dto) {
+            addLinks(d.getId(),d);
+        }
+        return dto;
     }
 
     public PersonDTO mock() {
@@ -55,6 +59,8 @@ public class PersonServices {
     public PersonDTO createPerson(PersonDTO person) {
         logger.debug("Creating new person");
         var entity = parseObject(person, Person.class);
+        var dto = parseObject(repository.save(entity),PersonDTO.class);
+        addLinks(dto.getId(), dto);
         return parseObject(repository.save(entity),PersonDTO.class);
     }
 
@@ -65,7 +71,9 @@ public class PersonServices {
         entity.setFirstName(person.getFirstName());
         entity.setLastName(person.getLastName());
         entity.setGender(person.getGender());
-        return parseObject(repository.save(entity), PersonDTO.class);
+        var dto = parseObject(repository.save(entity), PersonDTO.class);
+        addLinks(dto.getId(), dto);
+        return dto;
     }
 
     public void deletePerson(Long id) {
@@ -82,7 +90,7 @@ public class PersonServices {
     }
 
     private static void addLinks(Long id, PersonDTO dto) {
-        dto.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel().withType("GET"));
+        // dto.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel().withType("GET"));
         dto.add(linkTo(methodOn(PersonController.class).delete(id)).withRel("Delete").withType("DEL"));
         dto.add(linkTo(methodOn(PersonController.class).update(dto)).withRel("Update").withType("PUT"));
         dto.add(linkTo(methodOn(PersonController.class).findAll()).withRel("Find others").withType("GET"));
