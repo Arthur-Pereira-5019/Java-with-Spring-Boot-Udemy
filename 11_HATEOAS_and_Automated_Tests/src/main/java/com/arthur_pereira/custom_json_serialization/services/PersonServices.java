@@ -13,7 +13,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 import static com.arthur_pereira.custom_json_serialization.mapper.ObjectMapper.parseListObjects;
 import static com.arthur_pereira.custom_json_serialization.mapper.ObjectMapper.parseObject;
@@ -21,9 +20,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class PersonServices {
-
-
-    private final AtomicLong counter = new AtomicLong();
 
     @Autowired
     PersonRepository repository;
