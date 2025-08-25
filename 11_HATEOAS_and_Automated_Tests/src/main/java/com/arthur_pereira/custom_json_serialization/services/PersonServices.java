@@ -3,6 +3,7 @@ package com.arthur_pereira.custom_json_serialization.services;
 
 import com.arthur_pereira.custom_json_serialization.controllers.PersonController;
 import com.arthur_pereira.custom_json_serialization.dto.PersonDTO;
+import com.arthur_pereira.custom_json_serialization.exceptions.RequiredObjectIsNullException;
 import com.arthur_pereira.custom_json_serialization.exceptions.ResourceNotFoundException;
 import com.arthur_pereira.custom_json_serialization.model.Person;
 import com.arthur_pereira.custom_json_serialization.repositories.PersonRepository;
@@ -53,6 +54,8 @@ public class PersonServices {
 
 
     public PersonDTO createPerson(PersonDTO person) {
+        if (person == null) throw new RequiredObjectIsNullException();
+
         logger.debug("Creating new person");
         var entity = parseObject(person, Person.class);
         var dto = parseObject(repository.save(entity),PersonDTO.class);
@@ -61,6 +64,7 @@ public class PersonServices {
     }
 
     public PersonDTO updatePerson(PersonDTO person) {
+        if (person == null) throw new RequiredObjectIsNullException();
         logger.info("Updated someone");
         Person entity = parseObject(findById(person.getId()), Person.class);
         entity.setAddress(person.getAddress());

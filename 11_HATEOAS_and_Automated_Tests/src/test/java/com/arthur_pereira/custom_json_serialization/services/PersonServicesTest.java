@@ -1,5 +1,7 @@
 package com.arthur_pereira.custom_json_serialization.services;
 
+import com.arthur_pereira.custom_json_serialization.dto.PersonDTO;
+import com.arthur_pereira.custom_json_serialization.exceptions.RequiredObjectIsNullException;
 import com.arthur_pereira.custom_json_serialization.model.Person;
 import com.arthur_pereira.custom_json_serialization.repositories.PersonRepository;
 import com.arthur_pereira.custom_json_serialization.unittest.mocks.MockPerson;
@@ -15,7 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
@@ -66,9 +68,6 @@ class PersonServicesTest {
         assertEquals("First Name Test1",result.getFirstName());
         assertEquals("Last Name Test1",result.getLastName());
         assertEquals("Female",result.getGender());
-
-
-
     }
 
     @Test
@@ -77,14 +76,110 @@ class PersonServicesTest {
 
     @Test
     void createPerson() {
+        Person person = input.mockEntity(1);
+        Person persisted = person;
+        persisted.setId(1L);
+
+        PersonDTO dto = input.mockDTO(1);
+
+        when(repository.save((person))).thenReturn(persisted);
+
+        var result = service.createPerson(dto);
+
+        System.out.println(result.getId());
+        assertNotNull(result);
+        assertNotNull(result.getId());
+        assertNotNull(result.getLinks());
+        assertNotNull(result.getLinks().stream().anyMatch(link -> link.getRel().value().equals("Delete") &&
+                link.getHref().contains("/person/v1/1") &&
+                link.getType().equals("DEL")));
+
+        assertNotNull(result.getLinks().stream().anyMatch(link -> link.getRel().value().equals("Find others") &&
+                link.getHref().contains("/person/v1/all") &&
+                link.getType().equals("GET")));
+
+        assertNotNull(result.getLinks().stream().anyMatch(link -> link.getRel().value().equals("Create another one") &&
+                link.getHref().contains("/person/v1") &&
+                link.getType().equals("POST")));
+
+        assertNotNull(result.getLinks().stream().anyMatch(link -> link.getRel().value().equals("Update") &&
+                link.getHref().contains("/person/v1") &&
+                link.getType().equals("PUT")));
+
+        assertEquals("Address Test1",result.getAddress());
+        assertEquals("First Name Test1",result.getFirstName());
+        assertEquals("Last Name Test1",result.getLastName());
+        assertEquals("Female",result.getGender());
+    }
+
+    @Test
+    void testCreateWithNulLException() {
+        Exception exception = assertThrows(RequiredObjectIsNullException.class, () -> service.createPerson(null));
+
+        String expectedMessage = "Is not allowed to persist an empty object!";
+        String actualMessage = exception.getMessage();
+        assertEquals(expectedMessage, actualMessage);
     }
 
     @Test
     void updatePerson() {
+        Person person = input.mockEntity(1);
+        Person persisted = person;
+        persisted.setId(1L);
+
+        PersonDTO dto = input.mockDTO(1);
+
+        when(repository.findById((1L))).thenReturn(Optional.of(person));
+        when(repository.save((person))).thenReturn(persisted);
+
+        var result = service.updatePerson(dto);
+
+        System.out.println(result.getId());
+        assertNotNull(result);
+        assertNotNull(result.getId());
+        assertNotNull(result.getLinks());
+        assertNotNull(result.getLinks().stream().anyMatch(link -> link.getRel().value().equals("Delete") &&
+                link.getHref().contains("/person/v1/1") &&
+                link.getType().equals("DEL")));
+
+        assertNotNull(result.getLinks().stream().anyMatch(link -> link.getRel().value().equals("Find others") &&
+                link.getHref().contains("/person/v1/all") &&
+                link.getType().equals("GET")));
+
+        assertNotNull(result.getLinks().stream().anyMatch(link -> link.getRel().value().equals("Create another one") &&
+                link.getHref().contains("/person/v1") &&
+                link.getType().equals("POST")));
+
+        assertNotNull(result.getLinks().stream().anyMatch(link -> link.getRel().value().equals("Update") &&
+                link.getHref().contains("/person/v1") &&
+                link.getType().equals("PUT")));
+
+        assertEquals("Address Test1",result.getAddress());
+        assertEquals("First Name Test1",result.getFirstName());
+        assertEquals("Last Name Test1",result.getLastName());
+        assertEquals("Female",result.getGender());
+    }
+
+    @Test
+    void testUpdateWithNulLException() {
+        Exception exception = assertThrows(RequiredObjectIsNullException.class, () -> service.updatePerson(null));
+
+        String expectedMessage = "Is not allowed to persist an empty object!";
+        String actualMessage = exception.getMessage();
+        assertEquals(expectedMessage, actualMessage);
     }
 
     @Test
     void deletePerson() {
+        Person person = input.mockEntity(1);
+        person.setId(1L);
+        when(repository.findById((1L))).thenReturn(Optional.of(person));
+        var result = service.findById(1L);
+
+        service.deletePerson(1L);
+        //verify(repository, times(1)).findById(anyLong());
+        // verify(repository, times(1)).delete(any(Person.class));
+        verifyNoMoreInteractions(repository);
     }
 
     @Test
