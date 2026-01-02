@@ -1,10 +1,10 @@
 server:
   port: 8888
 cors:
-  originPatterns: http://localhost:8080,https://www.erudio.com.br,http://localhost:3000
+  originPatterns: http://localhost:8080,http://localhost:3000
 spring:
   application:
-    name: integration_tests
+    name: cors_configuration
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
@@ -17,7 +17,6 @@ spring:
 logging:
   level:
     root: Warn
-    com.arthur_pereira.First.REST.Endpoint: Warn
 spring-doc:
   paths-to-match: /**/v1/**
   swagger-ui:

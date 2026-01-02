@@ -19,7 +19,6 @@ public class PersonController implements PersonControllerDocs {
     @Autowired
     private PersonServices service;
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE})
     @Override
     public PersonDTO findById(@PathVariable("id") Long id) {
@@ -39,7 +38,6 @@ public class PersonController implements PersonControllerDocs {
         return service.mock();
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @PostMapping(value = "",
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_YAML_VALUE},
             consumes = MediaType.APPLICATION_JSON_VALUE)
