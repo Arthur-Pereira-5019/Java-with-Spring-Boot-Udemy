@@ -5,12 +5,18 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class GenderSerializer extends JsonSerializer<String> {
 
     @Override
     public void serialize(String gender, JsonGenerator jsg, SerializerProvider serializerProvider) throws IOException {
-        String formatedGender = "Male".equals(gender) ? "M" : "F";
+        String formatedGender;
+        if(Objects.equals(gender, "Male") || Objects.equals(gender, "M") || Objects.equals(gender, "male")) {
+            formatedGender = "M";
+        } else {
+            formatedGender = "F";
+        }
         jsg.writeString(formatedGender);
     }
 }
