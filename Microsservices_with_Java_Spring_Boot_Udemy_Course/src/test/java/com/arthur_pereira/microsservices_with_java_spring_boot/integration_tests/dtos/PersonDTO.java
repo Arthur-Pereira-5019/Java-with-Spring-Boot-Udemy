@@ -38,7 +38,17 @@ public class PersonDTO extends RepresentationModel<com.arthur_pereira.microsserv
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date birthDay;
 
+    private boolean enabled;
+
     public PersonDTO() {
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public Long getId() {
@@ -92,13 +102,14 @@ public class PersonDTO extends RepresentationModel<com.arthur_pereira.microsserv
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        com.arthur_pereira.microsservices_with_java_spring_boot.dto.PersonDTO personDTO = (com.arthur_pereira.microsservices_with_java_spring_boot.dto.PersonDTO) o;
-        return Objects.equals(getId(), personDTO.getId()) && Objects.equals(getFirstName(), personDTO.getFirstName()) && Objects.equals(getAddress(), personDTO.getAddress()) && Objects.equals(getLastName(), personDTO.getLastName()) && Objects.equals(getGender(), personDTO.getGender()) && Objects.equals(getPhoneNumber(), personDTO.getPhoneNumber()) && Objects.equals(getBirthDay(), personDTO.getBirthDay());
+        if (!super.equals(o)) return false;
+        PersonDTO personDTO = (PersonDTO) o;
+        return isEnabled() == personDTO.isEnabled() && Objects.equals(getId(), personDTO.getId()) && Objects.equals(getFirstName(), personDTO.getFirstName()) && Objects.equals(getAddress(), personDTO.getAddress()) && Objects.equals(getLastName(), personDTO.getLastName()) && Objects.equals(getGender(), personDTO.getGender()) && Objects.equals(getPhoneNumber(), personDTO.getPhoneNumber()) && Objects.equals(getBirthDay(), personDTO.getBirthDay());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getFirstName(), getAddress(), getLastName(), getGender(), getPhoneNumber(), getBirthDay());
+        return Objects.hash(super.hashCode(), getId(), getFirstName(), getAddress(), getLastName(), getGender(), getPhoneNumber(), getBirthDay(), isEnabled());
     }
 }
 

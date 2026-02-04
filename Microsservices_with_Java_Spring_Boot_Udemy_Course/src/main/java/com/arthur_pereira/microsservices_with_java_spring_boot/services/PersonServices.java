@@ -81,6 +81,12 @@ public class PersonServices {
         repository.deleteById(findById(id).getId());
     }
 
+    public PersonDTO disablePerson(Long id) {
+        logger.info("Disabling a person!");
+        repository.disablePerson(findById(id).getId());
+        return parseObject(findById(id), PersonDTO.class);
+    }
+
     public PersonDTO findById(Long id) {
         logger.debug("Finding one person!");
         var person = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Could not find the user"));
@@ -93,6 +99,7 @@ public class PersonServices {
         // dto.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel().withType("GET"));
         dto.add(linkTo(methodOn(PersonController.class).delete(id)).withRel("Delete").withType("DEL"));
         dto.add(linkTo(methodOn(PersonController.class).update(dto)).withRel("Update").withType("PUT"));
+        dto.add(linkTo(methodOn(PersonController.class).disablePerson(id)).withRel("Disable").withType("PATCH"));
         dto.add(linkTo(methodOn(PersonController.class).findAll()).withRel("Find others").withType("GET"));
         dto.add(linkTo(methodOn(PersonController.class).create(dto)).withRel("Create another one").withType("POST"));
     }
