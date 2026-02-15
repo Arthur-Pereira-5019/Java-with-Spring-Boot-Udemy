@@ -3,12 +3,14 @@ package com.arthur_pereira.microsservices_with_java_spring_boot.integration_test
 import com.arthur_pereira.microsservices_with_java_spring_boot.serializer.GenderSerializer;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
+@XmlRootElement
 public class PersonDTO extends RepresentationModel<com.arthur_pereira.microsservices_with_java_spring_boot.dto.PersonDTO> implements Serializable {
     private static final long serialVersionId=1L;
 

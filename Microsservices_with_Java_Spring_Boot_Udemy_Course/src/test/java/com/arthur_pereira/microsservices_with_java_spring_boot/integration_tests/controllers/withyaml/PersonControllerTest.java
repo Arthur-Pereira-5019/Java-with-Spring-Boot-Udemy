@@ -1,12 +1,15 @@
-package com.arthur_pereira.microsservices_with_java_spring_boot.integration_tests.controllers.withjson;
+package com.arthur_pereira.microsservices_with_java_spring_boot.integration_tests.controllers.withyaml;
+
 
 import com.arthur_pereira.microsservices_with_java_spring_boot.config.TestConfigs;
+import com.arthur_pereira.microsservices_with_java_spring_boot.integration_tests.converter.YAMLMapper;
 import com.arthur_pereira.microsservices_with_java_spring_boot.integration_tests.dtos.PersonDTO;
 import com.arthur_pereira.microsservices_with_java_spring_boot.integration_tests.test_containers.AbstractIntegrationTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -26,14 +29,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class PersonControllerTest extends AbstractIntegrationTest {
 
     private static RequestSpecification specification;
-    private static ObjectMapper objectMapper;
+    private static YAMLMapper objectMapper;
 
     private static PersonDTO person;
     @BeforeAll
     static void setUp() {
-        objectMapper = new ObjectMapper();
-        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-
+        objectMapper = new YAMLMapper();
         person = new PersonDTO();
     }
 
@@ -51,13 +52,14 @@ class PersonControllerTest extends AbstractIntegrationTest {
                 .build();
 
         var content = given(specification).
-                contentType(MediaType.APPLICATION_JSON_VALUE)
+                contentType(MediaType.APPLICATION_YAML_VALUE)
+                .accept(MediaType.APPLICATION_YAML_VALUE)
                 .body(person)
                 .when()
                 .post()
                 .then()
                 .statusCode(200)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_YAML_VALUE)
                 .extract()
                 .body()
                 .asString();
@@ -94,13 +96,14 @@ class PersonControllerTest extends AbstractIntegrationTest {
     @Order(2)
     void findById() throws JsonProcessingException {
         var content = given(specification).
-                contentType(MediaType.APPLICATION_JSON_VALUE)
+                contentType(MediaType.APPLICATION_YAML_VALUE)
+                .accept(MediaType.APPLICATION_YAML_VALUE)
                 .pathParam("id", person.getId())
                 .when()
                 .get("{id}")
                 .then()
                 .statusCode(200)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_YAML_VALUE)
                 .extract()
                 .body()
                 .asString();
@@ -126,13 +129,15 @@ class PersonControllerTest extends AbstractIntegrationTest {
     void update() throws JsonProcessingException {
         person.setLastName("Ferandino de Moraes");
         var content = given(specification).
-                contentType(MediaType.APPLICATION_JSON_VALUE)
+                contentType(MediaType.APPLICATION_YAML_VALUE)
+                .accept(MediaType.APPLICATION_YAML_VALUE)
+
                 .body(person)
                 .when()
                 .put()
                 .then()
                 .statusCode(200)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_YAML_VALUE)
                 .extract()
                 .body()
                 .asString();
@@ -157,13 +162,14 @@ class PersonControllerTest extends AbstractIntegrationTest {
     @Order(4)
     void findByIdAfterUpdate() throws JsonProcessingException {
         var content = given(specification).
-                contentType(MediaType.APPLICATION_JSON_VALUE)
+                contentType(MediaType.APPLICATION_YAML_VALUE)
+                .accept(MediaType.APPLICATION_YAML_VALUE)
                 .pathParam("id", person.getId())
                 .when()
                 .get("{id}")
                 .then()
                 .statusCode(200)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_YAML_VALUE)
                 .extract()
                 .body()
                 .asString();
@@ -188,13 +194,14 @@ class PersonControllerTest extends AbstractIntegrationTest {
     @Order(5)
     void disableTest() throws JsonProcessingException {
         var content = given(specification).
-                contentType(MediaType.APPLICATION_JSON_VALUE)
+                contentType(MediaType.APPLICATION_YAML_VALUE)
+                .accept(MediaType.APPLICATION_YAML_VALUE)
                 .pathParam("id", person.getId())
                 .when()
                 .patch("{id}")
                 .then()
                 .statusCode(200)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_YAML_VALUE)
                 .extract()
                 .body()
                 .asString();
